@@ -1,0 +1,25 @@
+{
+  "name": "estimate-compression-level",
+  "version": "0.0.2",
+  "description": "A Chrome browser extension that estimates the HTTP compression level of the page.",
+  "main": "background.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^3.11.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "./node_modules/eslint/bin/eslint.js background.js",
+    "zip": "zip estimatecompressionlevel.zip background.js images/*.png manifest.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastly/chrome-extension-estimate-compression-level.git"
+  },
+  "author": "leon@fastly.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastly/chrome-extension-estimate-compression-level/issues"
+  },
+  "homepage": "https://github.com/fastly/chrome-extension-estimate-compression-level#readme"
+}
