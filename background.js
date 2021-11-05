@@ -1,3 +1,5 @@
+//const pako = require("pako");
+
 // for each tab, we store the number of Fastly hits and misses
 const tabs = {};
 
@@ -23,15 +25,8 @@ chrome.webRequest.onCompleted.addListener(
       return;
     }
 
-    let seenXServedBy = false;
     let contentEncoding;
     for (const header of responseHeaders) {
-      if (header.name.toLowerCase() === "x-served-by") {
-        seenXServedBy = true;
-      }
-      if (header.name.toLowerCase() === "content-length") {
-        console.log(`${url} Content-Length: ${header.value}`);
-      }
       if (header.name.toLowerCase() === "content-encoding") {
         contentEncoding = header.value;
         console.log(`${url} Content-Encoding: ${header.value}`);
@@ -42,7 +37,7 @@ chrome.webRequest.onCompleted.addListener(
       return;
     }
 
-    console.log(`${method} ${url}`);
+    // console.log(`${method} ${url}`);
 
     fetch(url, {
       method: "GET",
@@ -55,76 +50,40 @@ chrome.webRequest.onCompleted.addListener(
         }
         return response.blob();
       })
-      .then(function (response) {
-        console.log(response);
+      .then(function (blob) {
+        console.log(blob);
+
+        tabs[tabId].level = 6;
+        updateText(tabId);
       });
-
-    // doesn't have a header from Fastly?
-    if (!seenXServedBy) {
-      return;
-    }
-
-    if (fromCache) {
-      return;
-    }
-
-    for (const header of responseHeaders) {
-      if (header.name.toLowerCase() === "x-cache") {
-        if (tabs[tabId]) {
-          if (header.value.indexOf("HIT") !== -1) {
-            tabs[tabId].hits++;
-            updateTextOccasionally(tabId);
-            console.log(`${url} HIT`);
-          } else if (header.value.indexOf("MISS") !== -1) {
-            tabs[tabId].misses++;
-            updateTextOccasionally(tabId);
-            console.log(`${url} MISS`);
-          }
-        }
-      }
-    }
   },
   { urls: ["<all_urls>"] },
   ["responseHeaders"]
 );
 
 // update the badge text with the cache hit ratio
-// but only occasionally to not use too much CPU
-function updateTextOccasionally(tabId) {
-  // only update the badge every 0.1 seconds
-  if (Date.now() - tabs[tabId].updated > 100) {
-    updateText(tabId);
-  }
-}
-
-// update the badge text with the cache hit ratio
 function updateText(tabId) {
-  // save when we last updated the badge
-  tabs[tabId].updated = Date.now();
-
-  // no requests, no badge
-  if (tabs[tabId].hits + tabs[tabId].misses === 0) {
+  // no level, no badge
+  if (!tabs[tabId].level) {
     return;
   }
 
+  // Set the icon
   chrome.browserAction.setIcon({
     path: {
-      19: "images/pc-on.png",
-      38: "images/pc-on-hidpi.png",
+      16: "images/pc16.png",
+      48: "images/pc48.png",
+      128: "images/pc128.png",
     },
     tabId,
   });
+
+  // Set the badge
+  let text = `G:${Math.round(tabs[tabId].level)}`;
   chrome.browserAction.setBadgeBackgroundColor({
     color: [232, 44, 42, 255],
     tabId,
   });
-  let text = `${Math.round(
-    (tabs[tabId].hits / (tabs[tabId].hits + tabs[tabId].misses)) * 100
-  )}%`;
-  // not enough space for four characters
-  if (text === "100%") {
-    text = "100";
-  }
   chrome.browserAction.setBadgeText({
     text,
     tabId,

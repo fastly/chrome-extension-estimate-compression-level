@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "./node_modules/eslint/bin/eslint.js background.js",
-    "zip": "zip estimatecompressionlevel.zip background.js images/*.png manifest.json"
+    "zip": "zip estimatecompressionlevel.zip background.js pako.min.js images/*.png manifest.json"
   },
   "repository": {
     "type": "git",
