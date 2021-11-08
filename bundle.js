@@ -16,7 +16,7 @@
 
   // As a page is loaded, estimate the compression level and update the badge text
   chrome.webRequest.onCompleted.addListener(
-    ({ method, url, fromCache, responseHeaders, statusCode, tabId, type }) => {
+    ({ method, url, responseHeaders, statusCode, tabId, type }) => {
       if (method != "GET" || type != "main_frame" || statusCode != 200) {
         return;
       }
