@@ -1,12 +1,12 @@
 {
   "name": "estimate-compression-level",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "A Chrome browser extension that estimates the HTTP compression level of the page.",
   "main": "background.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "npx eslint background.js",
-    "zip": "zip estimatecompressionlevel.zip background.js images/*.png manifest.json"
+    "zip": "zip estimatecompressionlevel.zip background.js pako.esm.mjs images/*.png manifest.json"
   },
   "repository": {
     "type": "git",

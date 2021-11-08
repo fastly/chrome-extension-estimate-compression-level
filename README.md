@@ -63,7 +63,9 @@ This extension does not support Brotli yet.
 
 ## Installation
 
-Visit https://fastly.us/XXX and click on "Add to Chrome".
+Until this extension has been reviewed by Chrome Web Store team, which
+can take several weeks, the only way to install this extension is to use
+the development method below.
 
 ## Development
 
