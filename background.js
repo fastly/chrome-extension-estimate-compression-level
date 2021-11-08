@@ -45,7 +45,7 @@ chrome.webRequest.onCompleted.addListener(
       })
       .then(function (arrayBuffer) {
         console.log(arrayBuffer);
-        let level = estimateGzipLevel(arrayBuffer, contentLength);
+        const level = estimateGzipLevel(arrayBuffer, contentLength);
         tabs[tabId].level = level;
         console.log(`tabs[tabId].level: ${tabs[tabId].level}`);
         updateText(tabId);
@@ -84,14 +84,13 @@ function estimateGzipLevel(uncompressed, originalLength) {
   let previousCompressedLength = uncompressed.length;
 
   const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  for (let level of levels) {
+  for (const level of levels) {
     const compressed = gzip(uncompressed, { level: level });
     const compressedLength = compressed.length;
     console.log(`${level}: ${compressedLength}`);
 
     if (compressedLength == originalLength) {
       return level;
-      break;
     }
 
     if (compressedLength < originalLength) {
