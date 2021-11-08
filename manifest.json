@@ -4,14 +4,11 @@
   "version": "0.0.1",
   "description": "A Chrome browser extension that estimates the HTTP compression level of the page.",
   "icons": {
-    "16": "images/pc16.png",
-    "48": "images/pc48.png",
-    "128": "images/pc128.png"
+    "128": "images/128.png"
   },
   "browser_action": {
     "default_icon": {
-      "19": "images/pc-off.png",
-      "38": "images/pc-off-hidpi.png"
+      "128": "images/128.png"
     }
   },
   "background": {
