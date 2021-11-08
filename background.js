@@ -1,27 +1,19 @@
-// const pako = require("./pako.js");
 import { gzip, ungzip } from "./pako.es5.min.js";
-// for each tab, we store the number of Fastly hits and misses
+
+// For each tab, we store some state
 const tabs = {};
 
-// as a new page is loaded, reset our stats for that tab
+// As a new page is loaded, reset our state for that tab
 chrome.webNavigation.onBeforeNavigate.addListener(({ frameId, tabId }) => {
   if (frameId === 0) {
-    tabs[tabId] = { hits: 0, misses: 0, updated: 0 };
+    tabs[tabId] = {};
   }
 });
 
-// once the page is completely loaded, make sure to show the badge text
-chrome.webNavigation.onCompleted.addListener(({ frameId, tabId }) => {
-  if (frameId === 0) {
-    updateText(tabId);
-  }
-});
-
-// as a resource is loaded, see if it came through Fastly as a hit or a miss
-// and if so update our stats and the badge text
+// As a page is loaded, estimate the compression level and update the badge text
 chrome.webRequest.onCompleted.addListener(
   ({ method, url, fromCache, responseHeaders, statusCode, tabId, type }) => {
-    if (method != "GET" || type != "main_frame") {
+    if (method != "GET" || type != "main_frame" || statusCode != 200) {
       return;
     }
 
@@ -43,19 +35,13 @@ chrome.webRequest.onCompleted.addListener(
 
     // console.log(`${method} ${url}`);
 
-    fetch(url, {
-      method: "GET",
-      headers: { "Accept-Encoding": "gzip" },
-    })
+    fetch(url)
       .then(function (response) {
         if (!response.ok) {
           console.log(`HTTP error! status: ${response.status}`);
           return;
         }
-        return response.blob();
-      })
-      .then(function (blob) {
-        return blob.arrayBuffer();
+        return response.arrayBuffer();
       })
       .then(function (arrayBuffer) {
         console.log(arrayBuffer);
@@ -69,9 +55,9 @@ chrome.webRequest.onCompleted.addListener(
   ["responseHeaders"]
 );
 
-// update the badge text with the cache hit ratio
+// Update the badge text
 function updateText(tabId) {
-  // no level, no badge
+  // No level, no badge
   if (!tabs[tabId].level) {
     return;
   }
@@ -91,6 +77,7 @@ function updateText(tabId) {
   });
 }
 
+// Estimate the gzip level
 function estimateGzipLevel(uncompressed, originalLength) {
   console.log(`Original length: ${originalLength}`);
 
