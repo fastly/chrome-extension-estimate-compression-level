@@ -81,7 +81,6 @@ function updateText(tabId) {
 function estimateGzipLevel(uncompressed, originalLength) {
   console.log(`Original length: ${originalLength}`);
 
-  let estimate = 11;
   let previousCompressedLength = uncompressed.length;
 
   const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -91,7 +90,7 @@ function estimateGzipLevel(uncompressed, originalLength) {
     console.log(`${level}: ${compressedLength}`);
 
     if (compressedLength == originalLength) {
-      estimate = level;
+      return level;
       break;
     }
 
@@ -106,13 +105,13 @@ function estimateGzipLevel(uncompressed, originalLength) {
           previousCompressedLength - compressedLength
         }`
       );
-      estimate =
+      return (
         level -
         (originalLength - compressedLength) /
-          (previousCompressedLength - compressedLength);
-      break;
+          (previousCompressedLength - compressedLength)
+      );
     }
     previousCompressedLength = compressedLength;
   }
-  return estimate;
+  return 11;
 }

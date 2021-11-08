@@ -85,7 +85,6 @@
   function estimateGzipLevel(uncompressed, originalLength) {
     console.log(`Original length: ${originalLength}`);
 
-    let estimate = 11;
     let previousCompressedLength = uncompressed.length;
 
     const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -95,8 +94,7 @@
       console.log(`${level}: ${compressedLength}`);
 
       if (compressedLength == originalLength) {
-        estimate = level;
-        break;
+        return level;
       }
 
       if (compressedLength < originalLength) {
@@ -110,15 +108,15 @@
           previousCompressedLength - compressedLength
         }`
         );
-        estimate =
+        return (
           level -
           (originalLength - compressedLength) /
-            (previousCompressedLength - compressedLength);
-        break;
+            (previousCompressedLength - compressedLength)
+        );
       }
       previousCompressedLength = compressedLength;
     }
-    return estimate;
+    return 11;
   }
 
 })();
