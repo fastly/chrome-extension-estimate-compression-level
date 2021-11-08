@@ -85,7 +85,7 @@ function estimateGzipLevel(uncompressed, originalLength) {
 
   const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   for (let level of levels) {
-    const compressed = pako.gzip(uncompressed, { level: level });
+    const compressed = gzip(uncompressed, { level: level });
     const compressedLength = compressed.length;
     console.log(`${level}: ${compressedLength}`);
 
