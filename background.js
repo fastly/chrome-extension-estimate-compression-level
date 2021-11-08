@@ -1,4 +1,4 @@
-import { gzip, ungzip } from "./pako.es5.min.js";
+import { gzip } from "./pako.es5.min.js";
 
 // For each tab, we store some state
 const tabs = {};
