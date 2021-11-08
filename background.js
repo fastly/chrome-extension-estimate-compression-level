@@ -76,16 +76,6 @@ function updateText(tabId) {
     return;
   }
 
-  // Set the icon
-  chrome.browserAction.setIcon({
-    path: {
-      16: "images/pc16.png",
-      48: "images/pc48.png",
-      128: "images/pc128.png",
-    },
-    tabId,
-  });
-
   // Set the badge
   console.log(`tabs[tabId].level: ${tabs[tabId].level}`);
   let text = `${parseFloat(tabs[tabId].level, 10).toFixed(1)}`;
