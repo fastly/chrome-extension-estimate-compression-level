@@ -1,5 +1,5 @@
-//const pako = require("pako");
-
+// const pako = require("./pako.js");
+import { gzip, ungzip } from "./pako.es5.min.js";
 // for each tab, we store the number of Fastly hits and misses
 const tabs = {};
 
@@ -26,14 +26,18 @@ chrome.webRequest.onCompleted.addListener(
     }
 
     let contentEncoding;
+    let contentLength;
     for (const header of responseHeaders) {
       if (header.name.toLowerCase() === "content-encoding") {
         contentEncoding = header.value;
         console.log(`${url} Content-Encoding: ${header.value}`);
+      } else if (header.name.toLowerCase() === "content-length") {
+        contentLength = parseInt(header.value, 10);
+        console.log(`${url} Content-Length: ${header.value}`);
       }
     }
 
-    if (contentEncoding != "gzip") {
+    if (contentEncoding != "gzip" || !contentLength) {
       return;
     }
 
@@ -51,9 +55,13 @@ chrome.webRequest.onCompleted.addListener(
         return response.blob();
       })
       .then(function (blob) {
-        console.log(blob);
-
-        tabs[tabId].level = 6;
+        return blob.arrayBuffer();
+      })
+      .then(function (arrayBuffer) {
+        console.log(arrayBuffer);
+        let level = estimateGzipLevel(arrayBuffer, contentLength);
+        tabs[tabId].level = level;
+        console.log(`tabs[tabId].level: ${tabs[tabId].level}`);
         updateText(tabId);
       });
   },
@@ -79,7 +87,10 @@ function updateText(tabId) {
   });
 
   // Set the badge
-  let text = `G:${Math.round(tabs[tabId].level)}`;
+  console.log(`tabs[tabId].level: ${tabs[tabId].level}`);
+  let text = `${parseFloat(tabs[tabId].level, 10).toFixed(1)}`;
+  text = text.replace(".0", "");
+  console.log(`Text: ${text}`);
   chrome.browserAction.setBadgeBackgroundColor({
     color: [232, 44, 42, 255],
     tabId,
@@ -88,4 +99,43 @@ function updateText(tabId) {
     text,
     tabId,
   });
+}
+
+function estimateGzipLevel(uncompressed, originalLength) {
+  console.log(`Original length: ${originalLength}`);
+
+  let estimate = 11;
+  let previousCompressedLength = uncompressed.length;
+
+  const levels = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  for (let level of levels) {
+    const compressed = pako.gzip(uncompressed, { level: level });
+    const compressedLength = compressed.length;
+    console.log(`${level}: ${compressedLength}`);
+
+    if (compressedLength == originalLength) {
+      estimate = level;
+      break;
+    }
+
+    if (compressedLength < originalLength) {
+      console.log(
+        `originalLength - compressedLength = ${
+          originalLength - compressedLength
+        }`
+      );
+      console.log(
+        `previousCompressedLength - compressedLength = ${
+          previousCompressedLength - compressedLength
+        }`
+      );
+      estimate =
+        level -
+        (originalLength - compressedLength) /
+          (previousCompressedLength - compressedLength);
+      break;
+    }
+    previousCompressedLength = compressedLength;
+  }
+  return estimate;
 }

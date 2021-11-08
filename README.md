@@ -1,5 +1,7 @@
 # cachehitratio
 
+rollup background.js --file bundle.js --format iife
+
 A Chrome browser extension that shows the cache hit ratio for objects on
 a page served by Fastly.
 
