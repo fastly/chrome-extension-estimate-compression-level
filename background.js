@@ -1,4 +1,4 @@
-import { gzip } from "./pako.es5.min.js";
+import { gzip } from "./pako.esm.mjs";
 
 // For each tab, we store some state
 const tabs = {};
@@ -67,11 +67,11 @@ function updateText(tabId) {
   let text = `${parseFloat(tabs[tabId].level, 10).toFixed(1)}`;
   text = text.replace(".0", "");
   console.log(`Text: ${text}`);
-  chrome.browserAction.setBadgeBackgroundColor({
+  chrome.action.setBadgeBackgroundColor({
     color: [232, 44, 42, 255],
     tabId,
   });
-  chrome.browserAction.setBadgeText({
+  chrome.action.setBadgeText({
     text,
     tabId,
   });

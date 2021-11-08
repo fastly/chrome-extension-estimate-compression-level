@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "npx eslint background.js",
-    "zip": "zip estimatecompressionlevel.zip bundle.js images/*.png manifest.json"
+    "zip": "zip estimatecompressionlevel.zip background.js images/*.png manifest.json"
   },
   "repository": {
     "type": "git",
