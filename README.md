@@ -91,6 +91,9 @@ Send a pull request.
 The icon was based on "compress icon" from
 [Iconoir](https://iconoir.com/), MIT license.
 
+This extensions includes [pako](https://nodeca.github.io/pako/), MIT
+license.
+
 This extension is available as open source under the terms of the [MIT
 License](http://opensource.org/licenses/MIT).
 
