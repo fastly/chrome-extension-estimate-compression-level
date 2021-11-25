@@ -56,6 +56,10 @@ variety of levels and then displays the result.
 
 This uses more network and CPU. Use sparingly.
 
+The extension requires `webRequest` permission to observe and analyze
+all traffic and `webNavigation` permission to receive notifications
+about the status of navigation requests for all traffic.
+
 ## TODO
 
 Some websites use the newer Brotli compression algorithm instead of gzip.
