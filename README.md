@@ -73,13 +73,7 @@ and click on "Add to Chrome".
 
 ## Development
 
-You should have access to the Fastly GitHub organization. Then run:
-
-```bash
-$ git clone git@github.com:fastly/chrome-extension-estimate-compression-level.git
-Cloning into 'chrome-extension-estimate-compression-level'...
-...
-```
+Clone this repository.
 
 To use, visit chrome://extensions/ in your Chrome browser. Select
 "Developer mode" then "Load an unpacked extension" and select the
