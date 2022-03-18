@@ -1,0 +1,35 @@
+{
+  "name": "estimate-compression-level",
+  "version": "0.0.2",
+  "description": "A Firefox browser extension that estimates the HTTP compression level of the page.",
+  "source": "background.js",
+  "main": "dist/background.js",
+  "scripts": {
+    "start": "parcel src/manifest.json --host localhost --target webext-dev --config @parcel/config-webextension",
+    "build": "parcel build src/manifest.json --target webext-prod --config @parcel/config-webextension",
+    "zip": "cd dist/webext-prod; zip estimatecompressionlevel.zip manifest.json up_/up_/shared/background.js up_/up_/shared/background.js.map up_/up_/shared/images/128.png"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastly/chrome-extension-estimate-compression-level.git"
+  },
+  "author": "leon@fastly.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastly/chrome-extension-estimate-compression-level/issues"
+  },
+  "homepage": "https://github.com/fastly/chrome-extension-estimate-compression-level#readme",
+  "devDependencies": {
+    "@parcel/config-webextension": "^2.3.2",
+    "parcel": "^2.3.2"
+  },
+  "targets": {
+    "webext-dev": {
+      "sourceMap": {
+        "inline": true,
+        "inlineSources": true
+      }
+    },
+    "webext-prod": {}
+  }
+}

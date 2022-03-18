@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Estimate compression level",
+  "version": "0.0.2",
+  "browser_action": {
+    "default_icon": {
+      "128": "../../shared/images/128.png"
+    }
+  },
+  "description": "A Firefox browser extension that estimates the HTTP compression level of the page.",
+  "icons": {
+    "128": "../../shared/images/128.png"
+  },
+  "background": {
+    "scripts": ["../../shared/background.js"]
+  },
+  "permissions": ["http://*/*", "https://*/*", "webRequest", "webNavigation"]
+}

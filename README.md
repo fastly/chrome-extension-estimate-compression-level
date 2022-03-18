@@ -2,12 +2,12 @@
 
 ## Synopsis
 
-A Chrome browser extension that estimates the compression level of the
-algorithm used to compress the page.
+A Chrome and Firefox browser extension that estimates the compression
+level of the algorithm used to compress the page.
 
 If you install the extension and then visit [https://www.example.com/](https://www.example.com/), you can see that the HTML page was compressed with level 6:
 
-![Screenshot](images/screenshot.png)
+![Screenshot](shared/images/screenshot.png)
 
 ## Background
 
@@ -50,7 +50,7 @@ than zlib, a fractional estimate of zlib compression level is shown.
 
 ## How does it work?
 
-The chrome extension notes the `Content-Length` of the page as it is
+The extension notes the `Content-Length` of the page as it is
 loaded, then fetches the page again, tries to compress it with a
 variety of levels and then displays the result.
 
@@ -67,17 +67,42 @@ This extension does not support Brotli yet.
 
 ## Installation
 
+### Chrome
+
 Visit
 https://chrome.google.com/webstore/detail/lgogndmdpoegjafbbedeedmeofohbopo
 and click on "Add to Chrome".
+
+### Firefox
+
+I will add the link here when it is published.
 
 ## Development
 
 Clone this repository.
 
+```bash
+npm install
+cd chrome
+npm install
+cd ../firefox
+npm install
+cd ../
+npm run build
+npm run zip
+```
+
+### Chrome
+
 To use, visit chrome://extensions/ in your Chrome browser. Select
 "Developer mode" then "Load an unpacked extension" and select the
-chrome-extension-estimate-compression-level directory. You're all good
+chrome/dist/ directory. You're all good to go!
+
+### Firefox
+
+To use, visit about:debugging#/runtime/this-firefox in your Firefox
+browser. Select "Load Temporary Add-on..." and select
+firefox/dist/webext-prod/estimatecompressionlevel.zip. You're all good
 to go!
 
 ## Contributing
