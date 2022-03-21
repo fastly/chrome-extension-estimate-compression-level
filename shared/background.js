@@ -1,17 +1,32 @@
 import { gzip } from "./pako.esm.mjs";
 
+let webNavigation;
+let webRequest;
+let action;
+if (typeof browser === "object") {
+  // Support Firefox's version 2 manifest
+  webNavigation = browser.webNavigation;
+  webRequest = browser.webRequest;
+  action = browser.browserAction;
+} else {
+  // Support Chrome's version 3 manifest
+  webNavigation = chrome.webNavigation;
+  webRequest = chrome.webRequest;
+  action = chrome.action;
+}
+
 // For each tab, we store some state
 const tabs = {};
 
 // As a new page is loaded, reset our state for that tab
-chrome.webNavigation.onBeforeNavigate.addListener(({ frameId, tabId }) => {
+webNavigation.onBeforeNavigate.addListener(({ frameId, tabId }) => {
   if (frameId === 0) {
     tabs[tabId] = {};
   }
 });
 
 // As a page is loaded, estimate the compression level and update the badge text
-chrome.webRequest.onCompleted.addListener(
+webRequest.onCompleted.addListener(
   ({ method, url, responseHeaders, statusCode, tabId, type }) => {
     if (method != "GET" || type != "main_frame" || statusCode != 200) {
       return;
@@ -67,11 +82,17 @@ function updateText(tabId) {
   let text = `${parseFloat(tabs[tabId].level, 10).toFixed(1)}`;
   text = text.replace(".0", "");
   console.log(`Text: ${text}`);
-  chrome.action.setBadgeBackgroundColor({
+  action.setBadgeBackgroundColor({
     color: [232, 44, 42, 255],
     tabId,
   });
-  chrome.action.setBadgeText({
+  if (action.setBadgeTextColor) {
+    action.setBadgeTextColor({
+      color: [255, 255, 255, 255],
+      tabId,
+    });
+  }
+  action.setBadgeText({
     text,
     tabId,
   });

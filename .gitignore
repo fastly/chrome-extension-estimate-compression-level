@@ -1,1 +1,4 @@
+chrome/dist/
+firefox/.parcel-cache/
+firefox/dist/
 node_modules/
