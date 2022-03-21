@@ -75,7 +75,7 @@ and click on "Add to Chrome".
 
 ### Firefox
 
-I will add the link here when it is published.
+Visit https://addons.mozilla.org/en-GB/firefox/addon/estimate-compression-level/ and click "Add to Firefox".
 
 ## Development
 
